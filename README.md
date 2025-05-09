@@ -166,9 +166,9 @@ Usage Steps:
 ## Demo Video
 
 1. Upload & analyze video by submitting mp4 file:
-<video controls src="Screen Recording 2025-05-09 at 5.59.56 PM.mov" title="Title"></video>
+https://youtu.be/o3bq1TY5M3A
 
 2. Use video url to analyze:
-<video controls src="Screen Recording 2025-05-09 at 6.02.25 PM.mov" title="Title"></video>
+https://youtu.be/EYyX-l5RSEs
 
 ---
