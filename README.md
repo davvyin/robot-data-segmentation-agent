@@ -99,11 +99,13 @@ The backend service is a Flask application running with **SocketIO** for real-ti
 
 ---
 
-## Deployment
+## Deployment (Using linux based system or macos)
+> Make sure you have docker installed before deployment
 
 To deploy the application, use Docker Compose:
 
 ```bash
+sudo chmod +x run.sh
 ./run.sh <OPENAI_KEY>
 ```
 
@@ -125,6 +127,7 @@ docker-compose down
 To clean up the environment, run:
 
 ```bash
+sudo chmod +x cleanup.sh
 ./cleanup.sh
 ```
 
