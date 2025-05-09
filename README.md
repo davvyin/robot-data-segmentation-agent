@@ -106,6 +106,7 @@ To deploy the application, use Docker Compose:
 ```bash
 ./run.sh <OPENAI_KEY>
 ```
+
 Note: make sure you have enough credit the run gpt-4o model
 you can
 
@@ -126,5 +127,48 @@ To clean up the environment, run:
 ```bash
 ./cleanup.sh
 ```
+
+⚠️ Port Availability Requirement
+
+Before running the application, ensure the following ports are available:
+
+8080 → Backend service
+
+3000 → Frontend service
+
+6379 → Redis service
+
+If any of these ports are in use, the containers will fail to start correctly.
+
+To stop all services:
+
+docker-compose down
+
+## Frontend Access
+
+Once the application is running, you can access the Frontend UI from browser at:
+
+```bash
+http://localhost:3000
+```
+
+Usage Steps:
+
+1. Open the frontend URL in your browser: <http://localhost:3000>
+2. You can upload a video file or provide a direct URL to a .mp4 video.
+3. Click Next to confirm the selection and move to the analysis step.
+4. Click Upload and Start Analysis to begin processing.
+5. Real-time status updates will be displayed on the screen.
+6. Once the analysis is complete, the segmented JSON results will be shown.
+
+
+
+## Demo Video
+
+1. Upload & analyze video by submitting mp4 file:
+<video controls src="Screen Recording 2025-05-09 at 5.59.56 PM.mov" title="Title"></video>
+
+2. Use video url to analyze:
+<video controls src="Screen Recording 2025-05-09 at 6.02.25 PM.mov" title="Title"></video>
 
 ---
