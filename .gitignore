@@ -1,4 +1,4 @@
-venv/*
+*venv
 sampled_frames
 *.mp4
 *.pyc

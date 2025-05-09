@@ -53,24 +53,61 @@ def extract_keyframes_by_diff(video_path, threshold=2):
     return keyframes
 
 
-def extract_frames_sample(video_path, n_frames):
+def extract_frames_sample(video_path, n_frames=None, persistant_diff=False):
     # sample frames with fix intervals
+    # n_frames: how many sampled frames
+
     cap = cv2.VideoCapture(video_path)
     fps = cap.get(cv2.CAP_PROP_FPS)
     total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+    duration = total_frames / fps
+    
+    # default n seconds frames
+    if not n_frames:
+        n_frames = int(duration)
     interval = total_frames // n_frames
     frames = []
     last_frame = None
     timestamp = 0
     frame_id = 0
+    
+    last_frame_gray = None
+    persistent_overlay = None
+    
     while True:
         ret, frame = cap.read()
         if not ret:
             break
         timestamp = frame_id / fps
+        
         last_frame = frame.copy()
+        gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        
+        overlay = frame.copy()
+        
+        if persistant_diff:
+            if last_frame_gray is not None:
+                diff = cv2.absdiff(last_frame_gray, gray_frame)
+                _, diff = cv2.threshold(diff, 50, 255, cv2.THRESH_BINARY)
+
+                if persistent_overlay is None:
+                    persistent_overlay = np.zeros_like(diff)
+                
+                persistent_overlay = cv2.bitwise_or(persistent_overlay, diff)
+
+                overlay = frame.copy()
+                overlay[persistent_overlay > 0] = (0, 0, 255)
+            else:
+                overlay = frame.copy()
+                persistent_overlay = np.zeros_like(gray_frame)
+        
+        # sampled frame
         if not frame_id % interval:
-            frames.append((timestamp, last_frame))
+            last_frame_gray = gray_frame.copy()
+            frames.append((timestamp, overlay))
+            # reset the grey frame for the window
+            persistent_overlay = np.zeros_like(gray_frame)
+        
         frame_id += 1
 
     if (frames and frames[-1] != last_frame) or not frames:
@@ -78,10 +115,8 @@ def extract_frames_sample(video_path, n_frames):
     cap.release()
     return frames
 
-
 def crop_frame(frame, x, y, width, height):
     # crop the image
-    print(frame[y : y + height, x : x + width])
     return frame[y : y + height, x : x + width]
 
 def outline_frame(frame, x, y, width, height, label=None, color=(0, 0, 255), thickness=2):
@@ -103,8 +138,6 @@ def outline_frames(frames, x, y, width, height, label=None, color=(0, 0, 255), t
         new_frames.append((timestamp, outline_frame(frame, x, y, width, height, label, color, thickness)))
     return new_frames
     
-
-
 def frame_to_base64(frame):
     _, buffer = cv2.imencode(".jpg", frame)
     b64 = base64.b64encode(buffer).decode("utf-8")
