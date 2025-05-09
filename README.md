@@ -72,7 +72,7 @@ The backend service is a Flask application running with **SocketIO** for real-ti
 
 ### Key Endpoints
 
-- `/`: Health check endpoint.
+- `/`: Check if the service alive
 - `/run_job`: Accepts a video file or URL, starts processing, and returns a job ID.
 
 ### Backend Modules
@@ -108,7 +108,7 @@ To deploy the application, use Docker Compose:
 ```
 
 Note: make sure you have enough credit the run gpt-4o model
-you can
+you can get the key from: https://platform.openai.com/api-keys
 
 This will:
 
